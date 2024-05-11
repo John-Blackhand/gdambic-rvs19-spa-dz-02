@@ -1,24 +1,34 @@
 #include <SFML/Graphics.hpp>
+#include "game_of_life.h"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Hello, SFML world!");
-	window.setFramerateLimit(60);
-	//Cvijet cvijet(&window);
+    sf::RenderWindow window(sf::VideoMode(600, 400), "GAME OF LIFE");
+    window.setFramerateLimit(60);
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
+    game_of_life game(60, 40, 10);
 
-		window.clear();
-		//cvijet.draw();
-		window.display();
-	}
+    bool colorTransitionComplete = false;
 
-	return 0;
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        if (!colorTransitionComplete) {
+            game.draw(window);
+            window.display();
+            colorTransitionComplete = game.isColorTransitionComplete();
+        }
+        else {
+            game.NovaMreza();
+            colorTransitionComplete = false;
+        }
+    }
+
+    return 0;
 }
